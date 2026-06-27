@@ -51,6 +51,11 @@ export type WeeklyInsight = {
   focusForWeek: string;
 };
 
+export type WeeklyInsightRecord = WeeklyInsight & {
+  weekStart: string;
+  label?: string;
+};
+
 export const MOOD_OPTIONS: Array<{
   id: MoodType;
   label: string;

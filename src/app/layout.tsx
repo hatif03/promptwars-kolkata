@@ -10,7 +10,7 @@ const geistSans = Geist({
 export const metadata: Metadata = {
   title: "Saathi — Exam prep ka saathi",
   description:
-    "An empathetic AI companion for students preparing for NEET, JEE, and high-stakes exams. Journal, reflect, and find calm.",
+    "An empathetic AI companion for students preparing for NEET, JEE, and high-stakes exams. Try the demo: aanya@saathi.demo / SaathiDemo2026!",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
@@ -22,8 +22,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
-  themeColor: "#7ba098",
+  themeColor: "#2f6b4f",
 };
 
 export default function RootLayout({

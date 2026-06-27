@@ -3,7 +3,7 @@ import { InsightsView } from "@/components/saathi/InsightsView";
 import { createClient } from "@/lib/supabase/server";
 import { callGroqWithFallback } from "@/lib/groq/pool";
 import { buildInsightsPrompt, INSIGHTS_MODEL } from "@/lib/ai/prompts/insights";
-import type { WeeklyInsight } from "@/lib/types";
+import type { WeeklyInsight, WeeklyInsightRecord } from "@/lib/types";
 import { hasGroqKeys } from "@/lib/groq/keys";
 
 export const dynamic = "force-dynamic";
@@ -16,25 +16,54 @@ function getWeekStart(date = new Date()): string {
   return d.toISOString().split("T")[0];
 }
 
+const WEEK_LABELS: Record<string, string> = {
+  "2026-04-07": "Week 2 — Early patterns",
+  "2026-04-28": "Week 4 — The Sunday pattern",
+  "2026-05-19": "Month 2 — Progress",
+  "2026-06-09": "Month 3 — Coping rituals",
+  "2026-06-23": "Exam week",
+};
+
+const FOCUS_LABELS: Record<string, string> = {
+  "2026-04-07": "Try 3 minutes of breathing before opening physics notes.",
+  "2026-04-28": "Try journaling before and after your Sunday call to see how it affects you.",
+  "2026-05-19": "Keep the before/after call journaling — it's working.",
+  "2026-06-09": "Trust your rituals on exam week.",
+  "2026-06-23": "Exam day: breathe first, then everything else.",
+};
+
 async function loadInsights(userId: string) {
   const supabase = await createClient();
   const weekStart = getWeekStart();
 
-  const { data: existing } = await supabase
+  const { data: allInsights } = await supabase
     .from("weekly_insights")
     .select("*")
     .eq("user_id", userId)
-    .eq("week_start", weekStart)
-    .single();
+    .order("week_start", { ascending: false });
+
+  const existing = allInsights?.find((i) => i.week_start === weekStart);
+
+  const pastInsights: WeeklyInsightRecord[] = (allInsights ?? [])
+    .filter((i) => i.week_start !== weekStart)
+    .map((i) => ({
+      weekStart: i.week_start,
+      label: WEEK_LABELS[i.week_start],
+      summary: i.summary,
+      patterns: (i.patterns as WeeklyInsight["patterns"]) ?? [],
+      invitationQuestion: i.invitation_question ?? "",
+      focusForWeek: FOCUS_LABELS[i.week_start] ?? "",
+    }));
 
   if (existing) {
     return {
-      insight: {
+      currentInsight: {
         summary: existing.summary,
         patterns: (existing.patterns as WeeklyInsight["patterns"]) ?? [],
         invitationQuestion: existing.invitation_question ?? "",
-        focusForWeek: "",
+        focusForWeek: FOCUS_LABELS[weekStart] ?? "",
       },
+      pastInsights,
       message: null,
     };
   }
@@ -56,14 +85,16 @@ async function loadInsights(userId: string) {
 
   if (!journals?.length && !moods?.length) {
     return {
-      insight: null,
+      currentInsight: null,
+      pastInsights,
       message: "Write a few journal entries this week to unlock your Pattern Report.",
     };
   }
 
   if (!hasGroqKeys()) {
     return {
-      insight: null,
+      currentInsight: null,
+      pastInsights,
       message: "Add Groq API keys to generate your Pattern Report.",
     };
   }
@@ -115,7 +146,7 @@ async function loadInsights(userId: string) {
     { onConflict: "user_id,week_start" }
   );
 
-  return { insight: parsed, message: null };
+  return { currentInsight: parsed, pastInsights, message: null };
 }
 
 export default async function InsightsPage() {
@@ -124,8 +155,13 @@ export default async function InsightsPage() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  let initial: { insight: WeeklyInsight | null; message: string | null } = {
-    insight: null,
+  let initial: {
+    currentInsight: WeeklyInsight | null;
+    pastInsights: WeeklyInsightRecord[];
+    message: string | null;
+  } = {
+    currentInsight: null,
+    pastInsights: [],
     message: "Sign in to view insights.",
   };
 
@@ -133,13 +169,21 @@ export default async function InsightsPage() {
     try {
       initial = await loadInsights(user.id);
     } catch {
-      initial = { insight: null, message: "Could not load insights right now." };
+      initial = {
+        currentInsight: null,
+        pastInsights: [],
+        message: "Could not load insights right now.",
+      };
     }
   }
 
   return (
     <AppShell title="Pattern Report" subtitle="What your words are telling you">
-      <InsightsView initialInsight={initial.insight} initialMessage={initial.message} />
+      <InsightsView
+        currentInsight={initial.currentInsight}
+        pastInsights={initial.pastInsights}
+        initialMessage={initial.message}
+      />
     </AppShell>
   );
 }

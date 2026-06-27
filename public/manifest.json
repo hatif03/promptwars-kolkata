@@ -4,8 +4,8 @@
   "description": "Empathetic AI companion for students preparing for NEET, JEE, and high-stakes exams",
   "start_url": "/home",
   "display": "standalone",
-  "background_color": "#f7f5f2",
-  "theme_color": "#7ba098",
+  "background_color": "#eef5ef",
+  "theme_color": "#2f6b4f",
   "orientation": "portrait",
   "icons": [
     {

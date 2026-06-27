@@ -1,13 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
 import { checkCrisisContent } from "@/lib/safety/crisis";
+import {
+  crisisCheckRequestSchema,
+  formatZodError,
+} from "@/lib/validation/schemas";
 
 export async function POST(request: NextRequest) {
-  const { text } = await request.json();
+  const body = await request.json();
+  const parsed = crisisCheckRequestSchema.safeParse(body);
 
-  if (!text?.trim()) {
-    return NextResponse.json({ error: "Text required" }, { status: 400 });
+  if (!parsed.success) {
+    return NextResponse.json(
+      { error: formatZodError(parsed.error) },
+      { status: 400 }
+    );
   }
 
-  const result = checkCrisisContent(text);
+  const result = checkCrisisContent(parsed.data.text);
   return NextResponse.json(result);
 }

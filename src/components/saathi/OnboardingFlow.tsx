@@ -64,7 +64,7 @@ export function OnboardingFlow() {
 
   if (step === "welcome") {
     return (
-      <Card className="border-saathi-sage/20 bg-gradient-to-br from-saathi-lavender/20 to-saathi-cream">
+      <Card className="border-saathi-sage/25 bg-gradient-to-br from-saathi-lavender/30 to-saathi-cream">
         <CardContent className="space-y-6 pt-8 text-center">
           <div>
             <h1 className="text-2xl font-semibold text-saathi-ink">Hi, I&apos;m Saathi</h1>
@@ -113,6 +113,8 @@ export function OnboardingFlow() {
                   key={exam}
                   type="button"
                   onClick={() => setExamType(exam)}
+                  aria-pressed={examType === exam}
+                  aria-label={`Preparing for ${exam}`}
                   className={`rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
                     examType === exam
                       ? "bg-saathi-sage text-white"
@@ -133,6 +135,8 @@ export function OnboardingFlow() {
                   key={lang}
                   type="button"
                   onClick={() => setLanguagePref(lang)}
+                  aria-pressed={languagePref === lang}
+                  aria-label={`Language ${lang}`}
                   className={`rounded-full px-3 py-1.5 text-xs font-medium capitalize ${
                     languagePref === lang
                       ? "bg-saathi-sage text-white"
@@ -172,7 +176,7 @@ export function OnboardingFlow() {
   if (step === "journal") {
     return (
       <div className="space-y-4">
-        <Card className="bg-saathi-lavender/10">
+        <Card className="bg-saathi-lavender/20">
           <CardContent className="pt-5">
             <h2 className="font-semibold text-saathi-ink">
               Your first entry, {displayName || "friend"}

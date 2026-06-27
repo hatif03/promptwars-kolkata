@@ -15,6 +15,7 @@ export function QuickExit() {
       onClick={handleQuickExit}
       className="text-saathi-muted hover:text-saathi-ink"
       title="Quick exit to a neutral site"
+      aria-label="Quick exit to Google"
     >
       <LogOut className="h-4 w-4" />
       Quick exit

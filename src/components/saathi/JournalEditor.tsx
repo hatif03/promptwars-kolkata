@@ -14,16 +14,26 @@ import { AI_DISCLAIMER } from "@/lib/safety/crisis";
 type JournalEditorProps = {
   onSaved?: () => void;
   compact?: boolean;
+  mood?: MoodType | null;
+  tags?: string[];
 };
 
-export function JournalEditor({ onSaved, compact = false }: JournalEditorProps) {
+export function JournalEditor({
+  onSaved,
+  compact = false,
+  mood: externalMood,
+  tags: externalTags,
+}: JournalEditorProps) {
   const [content, setContent] = useState("");
-  const [mood, setMood] = useState<MoodType | null>(null);
-  const [tags, setTags] = useState<string[]>([]);
+  const [internalMood, setInternalMood] = useState<MoodType | null>(null);
+  const [internalTags, setInternalTags] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [analysis, setAnalysis] = useState<JournalAnalysis | null>(null);
   const [isCrisis, setIsCrisis] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const mood = externalMood !== undefined ? externalMood : internalMood;
+  const tags = externalTags !== undefined ? externalTags : internalTags;
 
   async function handleSubmit() {
     if (!content.trim()) return;
@@ -61,8 +71,8 @@ export function JournalEditor({ onSaved, compact = false }: JournalEditorProps) 
       {!compact && (
         <MoodStrip
           onMoodSelect={(m, t) => {
-            setMood(m);
-            setTags(t);
+            setInternalMood(m);
+            setInternalTags(t);
           }}
         />
       )}
@@ -96,11 +106,11 @@ export function JournalEditor({ onSaved, compact = false }: JournalEditorProps) 
       </Button>
 
       {error && (
-        <p className="rounded-2xl bg-red-50 p-3 text-sm text-red-700">{error}</p>
+        <p className="rounded-2xl border border-saathi-destructive/20 bg-saathi-destructive/5 p-3 text-sm text-saathi-destructive">{error}</p>
       )}
 
       {analysis && (
-        <Card className={isCrisis ? "border-saathi-crisis/30 bg-red-50/50" : "bg-saathi-lavender/10"}>
+        <Card className={isCrisis ? "border-saathi-crisis/30 bg-saathi-destructive/5" : "bg-saathi-lavender/25"}>
           <CardContent className="space-y-3 pt-5">
             <div className="flex items-center gap-2 text-saathi-sage-dark">
               <Sparkles className="h-4 w-4" />

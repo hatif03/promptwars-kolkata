@@ -3,15 +3,15 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-2xl text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-saathi-sage/50 disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-2xl text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-saathi-ring/50 disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
-        default: "bg-saathi-sage text-white hover:bg-saathi-sage-dark",
-        secondary: "bg-saathi-lavender/30 text-saathi-ink hover:bg-saathi-lavender/50",
-        outline: "border border-saathi-sage/30 bg-white hover:bg-saathi-cream",
-        ghost: "hover:bg-saathi-lavender/20 text-saathi-ink",
-        crisis: "bg-saathi-crisis/10 text-saathi-crisis border border-saathi-crisis/20",
+        default: "bg-saathi-sage text-white shadow-md hover:bg-saathi-sage-dark",
+        secondary: "bg-saathi-lavender text-saathi-sage-dark hover:bg-saathi-mint",
+        outline: "border-2 border-saathi-sage/40 bg-saathi-surface text-saathi-sage-dark hover:bg-saathi-sage-light",
+        ghost: "hover:bg-saathi-sage-light text-saathi-sage-dark",
+        crisis: "bg-saathi-crisis/15 text-saathi-crisis border-2 border-saathi-crisis/30",
       },
       size: {
         default: "h-11 px-5 py-2",

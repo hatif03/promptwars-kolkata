@@ -8,16 +8,30 @@ import { recommendExercise } from "@/lib/data/calm-kit";
 type HomeCardsProps = {
   displayName: string;
   recentThemes?: string[];
+  daysToExam?: number | null;
 };
 
-export function HomeCards({ recentThemes = [] }: HomeCardsProps) {
+export function HomeCards({ recentThemes = [], daysToExam }: HomeCardsProps) {
   const exercise = recommendExercise(recentThemes);
   const quote = getDailyQuote();
+  const isExamDay = daysToExam === 0;
 
   return (
     <div className="space-y-4">
+      {isExamDay && (
+        <Card className="border-saathi-sage/50 bg-gradient-to-r from-saathi-sage-light to-saathi-lavender/60">
+          <CardContent className="p-4">
+            <p className="text-sm font-semibold text-saathi-ink">
+              NEET today — you&apos;ve got this
+            </p>
+            <p className="mt-1 text-xs text-saathi-muted">
+              Breathe first. You&apos;ve survived every hard day that led here.
+            </p>
+          </CardContent>
+        </Card>
+      )}
       <Link href="/companion">
-        <Card className="overflow-hidden bg-gradient-to-br from-saathi-sage/20 to-saathi-lavender/30 transition-transform hover:scale-[1.01]">
+        <Card className="overflow-hidden border-saathi-sage/40 bg-gradient-to-br from-saathi-sage-light via-saathi-mint/40 to-saathi-lavender/50 transition-transform hover:scale-[1.01]">
           <CardContent className="flex items-center justify-between p-5">
             <div>
               <p className="text-lg font-semibold text-saathi-ink">Talk to Saathi</p>
@@ -28,14 +42,14 @@ export function HomeCards({ recentThemes = [] }: HomeCardsProps) {
                 Start chat
               </Button>
             </div>
-            <MessageCircle className="h-12 w-12 text-saathi-sage/60" />
+            <MessageCircle className="h-12 w-12 text-saathi-sage" />
           </CardContent>
         </Card>
       </Link>
 
       <div className="grid grid-cols-2 gap-3">
         <Link href="/journal">
-          <Card className="h-full transition-colors hover:bg-saathi-cream/50">
+          <Card className="h-full border-saathi-sage/20 bg-saathi-sage-light/50 transition-colors hover:bg-saathi-mint/40">
             <CardContent className="flex flex-col items-start gap-2 p-4">
               <BookOpen className="h-5 w-5 text-saathi-sage" />
               <span className="font-medium text-saathi-ink">Journal</span>
@@ -43,16 +57,16 @@ export function HomeCards({ recentThemes = [] }: HomeCardsProps) {
           </Card>
         </Link>
         <Link href="/calm-kit">
-          <Card className="h-full transition-colors hover:bg-saathi-cream/50">
+          <Card className="h-full border-saathi-lavender/40 bg-saathi-lavender/30 transition-colors hover:bg-saathi-lavender/50">
             <CardContent className="flex flex-col items-start gap-2 p-4">
-              <Wind className="h-5 w-5 text-saathi-sage" />
+              <Wind className="h-5 w-5 text-saathi-sage-dark" />
               <span className="font-medium text-saathi-ink">Calm Kit</span>
             </CardContent>
           </Card>
         </Link>
       </div>
 
-      <Card className="bg-saathi-cream/40">
+      <Card className="border-saathi-mint/50 bg-saathi-sage-light/60">
         <CardContent className="p-4">
           <p className="text-sm italic leading-relaxed text-saathi-ink">
             &ldquo;{quote}&rdquo;
@@ -62,7 +76,7 @@ export function HomeCards({ recentThemes = [] }: HomeCardsProps) {
 
       {recentThemes.length > 0 && (
         <Link href={`/calm-kit/${exercise.id}`}>
-          <Card className="border-saathi-sage/20">
+          <Card className="border-saathi-sage/25">
             <CardContent className="flex items-center gap-3 p-4">
               <Sparkles className="h-5 w-5 shrink-0 text-saathi-sage" />
               <div>

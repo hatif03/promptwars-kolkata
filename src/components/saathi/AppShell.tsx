@@ -1,6 +1,7 @@
 "use client";
 
 import { ReactNode } from "react";
+import Link from "next/link";
 import { BottomNav } from "./BottomNav";
 import { QuickExit } from "./QuickExit";
 import { CrisisButton } from "./CrisisSheet";
@@ -26,10 +27,16 @@ export function AppShell({
 
   return (
     <div className="mx-auto min-h-screen max-w-md bg-saathi-bg pb-24">
-      <header className="sticky top-0 z-30 border-b border-saathi-sage/10 bg-saathi-bg/95 px-5 py-4 backdrop-blur-md">
+      <Link
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-2xl focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-saathi-ink focus:shadow-md"
+      >
+        Skip to main content
+      </Link>
+      <header className="sticky top-0 z-30 border-b border-saathi-border bg-gradient-to-r from-saathi-sage-light via-saathi-surface to-saathi-lavender/30 px-5 py-4 backdrop-blur-md">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-xs font-medium uppercase tracking-wide text-saathi-sage">
+            <p className="text-xs font-bold uppercase tracking-widest text-saathi-sage">
               Saathi
             </p>
             {title && (
@@ -47,7 +54,9 @@ export function AppShell({
         </div>
       </header>
 
-      <main className="px-5 py-4">{children}</main>
+      <main id="main-content" className="px-5 py-4" tabIndex={-1}>
+        {children}
+      </main>
 
       {showNav && <BottomNav />}
       <CrisisSheet open={crisisOpen} onClose={() => setCrisisOpen(false)} />

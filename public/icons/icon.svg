@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
-  <rect width="512" height="512" rx="96" fill="#7ba098"/>
-  <circle cx="256" cy="200" r="72" fill="#f7f5f2" opacity="0.95"/>
-  <path d="M120 380c40-80 232-80 272 0" stroke="#f7f5f2" stroke-width="32" stroke-linecap="round" opacity="0.95"/>
-  <text x="256" y="460" text-anchor="middle" fill="#f7f5f2" font-family="system-ui,sans-serif" font-size="48" font-weight="600">Saathi</text>
+  <rect width="512" height="512" rx="96" fill="#2f6b4f"/>
+  <circle cx="256" cy="200" r="72" fill="#eef5ef" opacity="0.95"/>
+  <path d="M120 380c40-80 232-80 272 0" stroke="#eef5ef" stroke-width="32" stroke-linecap="round" opacity="0.95"/>
+  <text x="256" y="460" text-anchor="middle" fill="#eef5ef" font-family="system-ui,sans-serif" font-size="48" font-weight="600">Saathi</text>
 </svg>

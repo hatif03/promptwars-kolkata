@@ -1,8 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { AppShell } from "@/components/saathi/AppShell";
 import { WelcomeHeader, HomeCards } from "@/components/saathi/HomeCards";
-import { JournalEditor } from "@/components/saathi/JournalEditor";
-import { MoodStrip } from "@/components/saathi/MoodStrip";
+import { HomeJournalSection } from "@/components/saathi/HomeJournalSection";
 
 export const dynamic = "force-dynamic";
 
@@ -32,14 +31,12 @@ export default async function HomePage() {
   return (
     <AppShell>
       <WelcomeHeader displayName={profile?.display_name ?? "friend"} />
-      <div className="mb-6">
-        <MoodStrip compact />
-      </div>
-      <JournalEditor compact />
+      <HomeJournalSection />
       <div className="mt-8">
         <HomeCards
           displayName={profile?.display_name ?? "friend"}
           recentThemes={recentThemes}
+          daysToExam={profile?.days_to_exam}
         />
       </div>
     </AppShell>

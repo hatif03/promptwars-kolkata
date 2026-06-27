@@ -3,6 +3,7 @@
 import { Phone, X, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CRISIS_RESOURCES, AI_DISCLAIMER } from "@/lib/safety/crisis";
+import { useFocusTrap } from "@/hooks/useFocusTrap";
 
 type CrisisSheetProps = {
   open: boolean;
@@ -10,28 +11,38 @@ type CrisisSheetProps = {
 };
 
 export function CrisisSheet({ open, onClose }: CrisisSheetProps) {
+  const dialogRef = useFocusTrap(open, onClose);
+
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 p-4 sm:items-center">
+    <div
+      className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 p-4 sm:items-center"
+      role="presentation"
+      onClick={onClose}
+    >
       <div
+        ref={dialogRef}
         className="w-full max-w-md rounded-3xl bg-white p-6 shadow-xl"
         role="dialog"
+        aria-modal="true"
         aria-labelledby="crisis-title"
+        onClick={(event) => event.stopPropagation()}
       >
         <div className="mb-4 flex items-start justify-between">
           <div className="flex items-center gap-2 text-saathi-crisis">
-            <AlertTriangle className="h-5 w-5" />
+            <AlertTriangle className="h-5 w-5" aria-hidden="true" />
             <h2 id="crisis-title" className="text-lg font-semibold">
               You deserve support
             </h2>
           </div>
           <button
+            type="button"
             onClick={onClose}
             className="rounded-full p-1 hover:bg-saathi-cream"
-            aria-label="Close"
+            aria-label="Close crisis resources"
           >
-            <X className="h-5 w-5" />
+            <X className="h-5 w-5" aria-hidden="true" />
           </button>
         </div>
 
@@ -45,14 +56,15 @@ export function CrisisSheet({ open, onClose }: CrisisSheetProps) {
             <a
               key={resource.number}
               href={resource.href}
-              className="flex items-center justify-between rounded-2xl border border-saathi-sage/15 bg-saathi-cream/50 p-4 transition-colors hover:bg-saathi-cream"
+              aria-label={`${resource.name}, ${resource.number}. ${resource.description}`}
+              className="flex items-center justify-between rounded-2xl border border-saathi-border bg-saathi-cream/50 p-4 transition-colors hover:bg-saathi-cream"
             >
               <div>
                 <p className="font-medium text-saathi-ink">{resource.name}</p>
                 <p className="text-xs text-saathi-muted">{resource.description}</p>
               </div>
               <div className="flex items-center gap-2 font-semibold text-saathi-sage-dark">
-                <Phone className="h-4 w-4" />
+                <Phone className="h-4 w-4" aria-hidden="true" />
                 {resource.number}
               </div>
             </a>
@@ -78,8 +90,9 @@ export function CrisisButton({
       size="sm"
       onClick={onClick}
       className={className}
+      aria-haspopup="dialog"
     >
-      <Phone className="h-4 w-4" />
+      <Phone className="h-4 w-4" aria-hidden="true" />
       Get help now
     </Button>
   );

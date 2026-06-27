@@ -16,7 +16,7 @@ export function BottomNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-saathi-sage/10 bg-white/95 backdrop-blur-md">
+    <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-saathi-border bg-saathi-surface/95 backdrop-blur-md">
       <div className="mx-auto flex max-w-md items-center justify-around px-4 py-3">
         {NAV_ITEMS.map(({ href, label, icon: Icon }) => {
           const active =
@@ -25,11 +25,12 @@ export function BottomNav() {
             <Link
               key={href}
               href={href}
+              aria-current={active ? "page" : undefined}
               className={cn(
-                "flex flex-col items-center gap-1 rounded-2xl px-4 py-2 text-xs transition-colors",
+                "flex flex-col items-center gap-1 rounded-2xl px-4 py-2 text-xs font-medium transition-colors",
                 active
-                  ? "bg-saathi-sage/15 text-saathi-sage-dark"
-                  : "text-saathi-muted hover:text-saathi-ink"
+                  ? "bg-saathi-sage text-white shadow-sm"
+                  : "text-saathi-muted hover:bg-saathi-sage-light hover:text-saathi-sage-dark"
               )}
             >
               <Icon className="h-5 w-5" />

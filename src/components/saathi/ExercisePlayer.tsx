@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { getCategoryStyle } from "@/lib/data/category-styles";
 import type { CalmExercise } from "@/lib/data/calm-kit";
 
 type ExercisePlayerProps = {
@@ -13,6 +14,7 @@ type ExercisePlayerProps = {
 
 export function ExercisePlayer({ exercise }: ExercisePlayerProps) {
   const router = useRouter();
+  const style = getCategoryStyle(exercise.category);
   const [step, setStep] = useState(0);
   const [completed, setCompleted] = useState(false);
   const [rating, setRating] = useState<number | null>(null);
@@ -84,9 +86,10 @@ export function ExercisePlayer({ exercise }: ExercisePlayerProps) {
 
   return (
     <div className="space-y-6">
-      <Card className="bg-saathi-lavender/10">
+      <Card className={`border-l-4 ${style.border} ${style.card}`}>
         <CardContent className="pt-6">
-          <p className="text-sm text-saathi-muted">
+          <p className="text-sm font-medium text-saathi-sage">{style.label}</p>
+          <p className="mt-1 text-sm text-saathi-muted">
             Step {step + 1} of {exercise.steps.length}
           </p>
           <p className="mt-3 text-lg leading-relaxed text-saathi-ink">

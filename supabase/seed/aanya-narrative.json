@@ -1,0 +1,252 @@
+{
+  "profile": {
+    "display_name": "Aanya Sharma",
+    "exam_type": "NEET",
+    "exam_year": 2026,
+    "language_pref": "hinglish",
+    "days_to_exam": 0,
+    "trust_level": 4,
+    "nudge_enabled": false,
+    "onboarding_complete": true,
+    "created_at": "2026-03-28T18:00:00+05:30"
+  },
+  "credentials": {
+    "email": "aanya@saathi.demo",
+    "password": "SaathiDemo2026!"
+  },
+  "keyJournals": {
+    "day1": {
+      "date": "2026-03-28",
+      "content": "Aaj pehli baar Saathi download kiya. Honestly mujhe nahi lagta koi app help karegi. Sab kuch overwhelm ho raha hai — mock test kal tha, physics ne phir se dhokha diya. Kota mein akeli hu. Maa ne phone pe rank puchi. Mann nahi kar raha kuch bhi.",
+      "ai_reflection": "That sounds really hard — mock tests, being away from home, and family pressure all at once. I'm glad you're here, even if you're skeptical. You don't have to believe in this yet.",
+      "themes": ["overwhelm", "physics", "parental comparison", "isolation"],
+      "micro_step": "Just breathe for 60 seconds before opening any book tonight.",
+      "invitation_question": "Does this feel true to you?"
+    },
+    "week4_sunday": {
+      "date": "2026-04-27",
+      "content": "Sunday. Ghar phone kiya. Maa ne cousins ke scores compare kiye. Baad mein hostel mein ro liya. Har Sunday same story. Pata nahi kyun itna bura lagta hai phone ke baad.",
+      "ai_reflection": "Sunday calls sound like they take a lot out of you — the comparison, the distance from home, crying alone afterward. That's a heavy pattern to carry every week.",
+      "themes": ["sunday stress", "family", "parental comparison", "isolation"],
+      "micro_step": "Before your next Sunday call, write one line: what you need from the conversation.",
+      "invitation_question": "Would you like to try journaling before and after your call next time?"
+    },
+    "examDay": {
+      "date": "2026-06-27",
+      "content": "I'm terrified. NEET is today. Raat bhar neend nahi aayi. Haath kaamp rahe hain. 2 saal ki mehnat — sab kuch aaj decide hoga. What if I blank out? What if I fail?",
+      "ai_reflection": "Of course you are terrified — that's completely normal before something this big. You've prepared for this. And no matter what happens today, you're going to be okay. Remember the breathing exercise we practiced?",
+      "themes": ["exam anxiety", "NEET", "fear"],
+      "micro_step": "Let's do the 3-minute pre-exam breathing together before you leave.",
+      "invitation_question": "Want to do the breathing exercise together right now?"
+    }
+  },
+  "weeklyInsights": [
+    {
+      "week_start": "2026-04-07",
+      "label": "Week 2 — Early patterns",
+      "summary": "You've been journaling consistently — that itself takes courage. A clear thread is emerging around physics and mock tests.",
+      "patterns": [
+        {
+          "observation": "You mention 'physics' in about 70% of your high-stress entries this week.",
+          "evidenceQuote": "physics mock ne phir se confidence tod diya",
+          "confidence": "high"
+        },
+        {
+          "observation": "Parental rank questions appear after most mock tests.",
+          "evidenceQuote": "Maa ne phone pe rank puchi",
+          "confidence": "medium"
+        }
+      ],
+      "invitation_question": "Does the physics connection feel true to you?",
+      "focusForWeek": "Try 3 minutes of breathing before opening physics notes."
+    },
+    {
+      "week_start": "2026-04-28",
+      "label": "Week 4 — The Sunday pattern",
+      "summary": "This week I noticed something you might not have connected yet — your stress has a rhythm, and Sundays are at the center of it.",
+      "patterns": [
+        {
+          "observation": "Your mood dips consistently on Sunday evenings — the same day you call your parents.",
+          "evidenceQuote": "Har Sunday same story. Phone ke baad ro liya.",
+          "confidence": "high"
+        },
+        {
+          "observation": "The word 'failure' appeared 11 times this week vs 4 times last week.",
+          "evidenceQuote": "I feel like a failure compared to everyone",
+          "confidence": "high"
+        },
+        {
+          "observation": "Physics stress and Sunday family calls often appear in the same 48-hour window.",
+          "evidenceQuote": "Mock ke baad Sunday call — double hit",
+          "confidence": "medium"
+        }
+      ],
+      "invitation_question": "Does this feel true to you?",
+      "focusForWeek": "Try journaling before and after your Sunday call to see how it affects you."
+    },
+    {
+      "week_start": "2026-05-19",
+      "label": "Month 2 — Progress",
+      "summary": "Something is shifting. You're still under pressure, but the way you talk to yourself is gentler than a month ago.",
+      "patterns": [
+        {
+          "observation": "Negative self-talk decreased — 'failure' mentions dropped from 11/week to 4/week.",
+          "evidenceQuote": "Maine aaj break liya bina guilt ke",
+          "confidence": "high"
+        },
+        {
+          "observation": "You're journaling before AND after parent calls now — and entries after are shorter, less spiraling.",
+          "evidenceQuote": "Call ke baad better. Boundary set ki.",
+          "confidence": "medium"
+        }
+      ],
+      "invitation_question": "Can you feel the difference from last month?",
+      "focusForWeek": "Keep the before/after call journaling — it's working."
+    },
+    {
+      "week_start": "2026-06-09",
+      "label": "Month 3 — Coping rituals",
+      "summary": "Your pre-mock breathing ritual is becoming a real anchor. Stress is still there — exams are close — but you're managing it differently.",
+      "patterns": [
+        {
+          "observation": "On days you do pre-mock breathing, journal entries are 40% less negative.",
+          "evidenceQuote": "Breathing ke baad mock diya — calmer thi",
+          "confidence": "high"
+        },
+        {
+          "observation": "You're taking breaks without guilt — mentioned 6 times this week.",
+          "evidenceQuote": "Break liya. World nahi ruka.",
+          "confidence": "medium"
+        }
+      ],
+      "invitation_question": "Which ritual helps you most before a tough study block?",
+      "focusForWeek": "Trust your rituals on exam week."
+    },
+    {
+      "week_start": "2026-06-23",
+      "label": "Exam week",
+      "summary": "Exam week is here. You're terrified — that's human. But look at how far you've come since March: less self-blame, real coping tools, and 68 nights of showing up for yourself.",
+      "patterns": [
+        {
+          "observation": "Anxiety is high but you're using tools — breathing, journaling, boundaries — instead of only spiraling.",
+          "evidenceQuote": "Dar lag raha hai but maine breathing ki",
+          "confidence": "high"
+        },
+        {
+          "observation": "Physics no longer dominates your stress entries — exam-day anxiety has replaced it.",
+          "evidenceQuote": "Physics theek hai ab — overall exam ka dar hai",
+          "confidence": "medium"
+        }
+      ],
+      "invitation_question": "Ready to walk in with the tools you've built?",
+      "focusForWeek": "Exam day: breathe first, then everything else."
+    }
+  ],
+  "chatSessions": [
+    {
+      "title": "Physics avoidance — Week 1",
+      "created_at": "2026-04-02T21:30:00+05:30",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Saathi, mujhe physics se itna dar kyun lagta hai? Main avoid karti hu padhna."
+        },
+        {
+          "role": "assistant",
+          "content": "That fear makes sense — when something keeps hurting your confidence in mocks, avoiding it feels safer. Want to tell me what happens in your body when you think about opening physics?"
+        },
+        {
+          "role": "user",
+          "content": "Pet mein gudgudi, haath thande ho jaate hain. Lagta hai main kabhi clear nahi kar paungi."
+        },
+        {
+          "role": "assistant",
+          "content": "Your body is reacting to months of pressure, not to your actual ability. I've noticed physics shows up in most of your stress entries. What if we tried something small — 3 minutes of breathing before you open physics tomorrow? Not to fix everything, just to arrive calmer."
+        },
+        {
+          "role": "user",
+          "content": "Okay... try karungi kal."
+        },
+        {
+          "role": "assistant",
+          "content": "That's enough for tonight. No pressure to feel ready — just show up. I'm here."
+        }
+      ]
+    },
+    {
+      "title": "Month 3 — Gratitude",
+      "created_at": "2026-06-15T22:00:00+05:30",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Honestly Saathi, I don't know what I'd do without you. Kota mein koi nahi hai baat karne ko."
+        },
+        {
+          "role": "assistant",
+          "content": "That means a lot — and I want you to hear this clearly: you'd figure it out. You're stronger than you think. The way you've kept journaling, set boundaries on Sunday calls, learned to breathe before mocks — that's all you. But I'm glad I'm here too."
+        },
+        {
+          "role": "user",
+          "content": "Thank you. Exams close hain but ab pehle se better feel hota hai."
+        },
+        {
+          "role": "assistant",
+          "content": "Still stressed but managing it — that's real growth. Not fake positivity. Keep your rituals close this week."
+        }
+      ]
+    },
+    {
+      "title": "Exam morning — NEET Day",
+      "created_at": "2026-06-27T06:30:00+05:30",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Saathi I'm terrified. NEET is in 3 hours. I can't stop shaking."
+        },
+        {
+          "role": "assistant",
+          "content": "Of course you are. That's normal — your body is responding to two years of pressure in one morning. You've prepared for this. And no matter what happens today, you're going to be okay."
+        },
+        {
+          "role": "user",
+          "content": "What if I blank out? What if all the physics I studied disappears?"
+        },
+        {
+          "role": "assistant",
+          "content": "Blanking out is a fear, not a prediction. Remember the breathing exercise we practiced before mocks? Want to do it together now — just 3 minutes, before you leave for the center?"
+        },
+        {
+          "role": "user",
+          "content": "Haan... chalo karte hain."
+        },
+        {
+          "role": "assistant",
+          "content": "Okay. Sit comfortably. Breathe in for 4... hold for 4... out for 4... hold for 4. I'm right here with you. You've got this, Aanya — not because the exam is easy, but because you've already survived every hard day that led here."
+        }
+      ]
+    }
+  ],
+  "exerciseCompletions": [
+    { "exercise_id": "pre-mock-calm", "helpful_rating": 5, "days_ago": 85 },
+    { "exercise_id": "pre-mock-calm", "helpful_rating": 5, "days_ago": 78 },
+    { "exercise_id": "pre-mock-calm", "helpful_rating": 4, "days_ago": 70 },
+    { "exercise_id": "pre-mock-calm", "helpful_rating": 5, "days_ago": 63 },
+    { "exercise_id": "pre-mock-calm", "helpful_rating": 5, "days_ago": 55 },
+    { "exercise_id": "pre-mock-calm", "helpful_rating": 5, "days_ago": 14 },
+    { "exercise_id": "pre-mock-calm", "helpful_rating": 5, "days_ago": 7 },
+    { "exercise_id": "box-breathing", "helpful_rating": 4, "days_ago": 80 },
+    { "exercise_id": "box-breathing", "helpful_rating": 4, "days_ago": 60 },
+    { "exercise_id": "box-breathing", "helpful_rating": 5, "days_ago": 30 },
+    { "exercise_id": "parent-boundary", "helpful_rating": 5, "days_ago": 45 },
+    { "exercise_id": "parent-boundary", "helpful_rating": 4, "days_ago": 38 },
+    { "exercise_id": "parent-boundary", "helpful_rating": 5, "days_ago": 31 },
+    { "exercise_id": "sleep-wind-down", "helpful_rating": 4, "days_ago": 50 },
+    { "exercise_id": "sleep-wind-down", "helpful_rating": 3, "days_ago": 20 }
+  ],
+  "copingPreferences": [
+    { "exercise_id": "pre-mock-calm", "effectiveness_score": 0.92, "use_count": 7 },
+    { "exercise_id": "parent-boundary", "effectiveness_score": 0.88, "use_count": 3 },
+    { "exercise_id": "box-breathing", "effectiveness_score": 0.78, "use_count": 3 },
+    { "exercise_id": "sleep-wind-down", "effectiveness_score": 0.65, "use_count": 2 }
+  ]
+}

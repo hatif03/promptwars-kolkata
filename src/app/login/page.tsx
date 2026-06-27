@@ -2,11 +2,13 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Sparkles } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { AI_DISCLAIMER } from "@/lib/safety/crisis";
+import { DEMO_ACCOUNT } from "@/lib/demo-account";
 
 type AuthMode = "login" | "signup";
 
@@ -68,6 +70,32 @@ export default function LoginPage() {
     setMode("login");
   }
 
+  async function handleDemoLogin() {
+    setLoading(true);
+    setError(null);
+    setMessage(null);
+    setEmail(DEMO_ACCOUNT.email);
+    setPassword(DEMO_ACCOUNT.password);
+    setMode("login");
+
+    const supabase = createClient();
+    const { error: authError } = await supabase.auth.signInWithPassword({
+      email: DEMO_ACCOUNT.email,
+      password: DEMO_ACCOUNT.password,
+    });
+
+    setLoading(false);
+    if (authError) {
+      setError(
+        `${authError.message} If this is a fresh deploy, ask the host to run npm run seed:aanya.`
+      );
+      return;
+    }
+
+    router.push("/home");
+    router.refresh();
+  }
+
   return (
     <div className="mx-auto flex min-h-screen max-w-md flex-col justify-center px-5 py-12">
       <div className="mb-8 text-center">
@@ -81,6 +109,40 @@ export default function LoginPage() {
           Sunno. Samjho. Saans lo.
         </p>
       </div>
+
+      <Card className="mb-4 border-saathi-sage/40 bg-gradient-to-br from-saathi-sage-light via-saathi-surface to-saathi-lavender/40">
+        <CardContent className="space-y-3 pt-5">
+          <div className="flex items-start gap-3">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-saathi-sage text-white">
+              <Sparkles className="h-5 w-5" />
+            </div>
+            <div>
+              <p className="font-semibold text-saathi-ink">Try without signing up</p>
+              <p className="mt-1 text-xs leading-relaxed text-saathi-muted">
+                {DEMO_ACCOUNT.description}
+              </p>
+            </div>
+          </div>
+          <div className="rounded-2xl border border-saathi-border bg-saathi-surface/80 px-3 py-2 text-xs text-saathi-ink">
+            <p>
+              <span className="font-medium text-saathi-sage-dark">Email:</span>{" "}
+              {DEMO_ACCOUNT.email}
+            </p>
+            <p className="mt-1">
+              <span className="font-medium text-saathi-sage-dark">Password:</span>{" "}
+              {DEMO_ACCOUNT.password}
+            </p>
+          </div>
+          <Button
+            type="button"
+            className="w-full"
+            disabled={loading}
+            onClick={handleDemoLogin}
+          >
+            {loading ? "Opening demo..." : `Explore as ${DEMO_ACCOUNT.displayName}`}
+          </Button>
+        </CardContent>
+      </Card>
 
       <Card>
         <CardContent className="space-y-4 pt-6">
@@ -150,7 +212,7 @@ export default function LoginPage() {
             </div>
 
             {error && (
-              <p className="rounded-2xl bg-red-50 p-3 text-sm text-red-700">{error}</p>
+              <p className="rounded-2xl border border-saathi-destructive/20 bg-saathi-destructive/5 p-3 text-sm text-saathi-destructive">{error}</p>
             )}
 
             {message && (

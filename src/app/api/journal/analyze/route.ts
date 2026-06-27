@@ -2,8 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { callGroqWithFallback } from "@/lib/groq/pool";
 import { buildJournalAnalystPrompt, JOURNAL_ANALYSIS_MODEL } from "@/lib/ai/prompts/journal";
+import { parseJournalAnalysis } from "@/lib/ai/parse-journal-analysis";
 import { checkCrisisContent, CRISIS_RESPONSE_TEMPLATE } from "@/lib/safety/crisis";
-import type { JournalAnalysis } from "@/lib/types";
+import {
+  formatZodError,
+  journalAnalyzeRequestSchema,
+} from "@/lib/validation/schemas";
 
 export async function POST(request: NextRequest) {
   try {
@@ -17,15 +21,16 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { content, mood, tags } = body as {
-      content: string;
-      mood?: string;
-      tags?: string[];
-    };
+    const parsed = journalAnalyzeRequestSchema.safeParse(body);
 
-    if (!content?.trim()) {
-      return NextResponse.json({ error: "Content required" }, { status: 400 });
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: formatZodError(parsed.error) },
+        { status: 400 }
+      );
     }
+
+    const { content, mood, tags } = parsed.data;
 
     const crisisCheck = checkCrisisContent(content);
     if (crisisCheck.isCrisis) {
@@ -92,20 +97,7 @@ export async function POST(request: NextRequest) {
     });
 
     const raw = result.choices[0]?.message?.content ?? "{}";
-    let analysis: JournalAnalysis;
-
-    try {
-      analysis = JSON.parse(raw) as JournalAnalysis;
-    } catch {
-      analysis = {
-        reflection:
-          "Thank you for sharing this. What you're feeling matters, and I'm glad you wrote it down.",
-        themes: ["stress"],
-        microStep: "Take 3 slow breaths before your next study block.",
-        invitationQuestion: "Does this feel true to you?",
-        recommendedExerciseId: "box-breathing",
-      };
-    }
+    const analysis = parseJournalAnalysis(raw);
 
     const postCrisis = checkCrisisContent(analysis.reflection);
     if (postCrisis.isCrisis) {

@@ -1,16 +1,28 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f7f5f2;
-  --foreground: #2d3436;
-  --saathi-bg: #f7f5f2;
-  --saathi-cream: #f0ebe3;
-  --saathi-lavender: #d4c5e8;
-  --saathi-sage: #7ba098;
-  --saathi-sage-dark: #5f857c;
-  --saathi-ink: #2d3436;
-  --saathi-muted: #6b7280;
-  --saathi-crisis: #b45309;
+  --background: #eef5ef;
+  --foreground: #1a2e24;
+  --saathi-bg: #eef5ef;
+  --saathi-cream: #dce8dc;
+  --saathi-surface: #f7fbf7;
+  --saathi-lavender: #b8cce8;
+  --saathi-mint: #a8d4bc;
+  --saathi-sage: #2f6b4f;
+  --saathi-sage-dark: #245a41;
+  --saathi-sage-light: #d4eadc;
+  --saathi-ink: #1a2e24;
+  --saathi-muted: #4f6358;
+  --saathi-crisis: #c73e3a;
+  --saathi-border: #b8cfbe;
+  --saathi-ring: #2f6b4f;
+  --saathi-destructive: #c73e3a;
+  --saathi-cat-anxiety: #6b9fd4;
+  --saathi-cat-overwhelm: #c9925a;
+  --saathi-cat-sleep: #8b7ec8;
+  --saathi-cat-motivation: #4aab72;
+  --saathi-cat-anger: #d47070;
+  --saathi-cat-focus: #4a9fd4;
 }
 
 @theme inline {
@@ -18,12 +30,24 @@
   --color-foreground: var(--foreground);
   --color-saathi-bg: var(--saathi-bg);
   --color-saathi-cream: var(--saathi-cream);
+  --color-saathi-surface: var(--saathi-surface);
   --color-saathi-lavender: var(--saathi-lavender);
+  --color-saathi-mint: var(--saathi-mint);
   --color-saathi-sage: var(--saathi-sage);
   --color-saathi-sage-dark: var(--saathi-sage-dark);
+  --color-saathi-sage-light: var(--saathi-sage-light);
   --color-saathi-ink: var(--saathi-ink);
   --color-saathi-muted: var(--saathi-muted);
   --color-saathi-crisis: var(--saathi-crisis);
+  --color-saathi-border: var(--saathi-border);
+  --color-saathi-ring: var(--saathi-ring);
+  --color-saathi-destructive: var(--saathi-destructive);
+  --color-saathi-cat-anxiety: var(--saathi-cat-anxiety);
+  --color-saathi-cat-overwhelm: var(--saathi-cat-overwhelm);
+  --color-saathi-cat-sleep: var(--saathi-cat-sleep);
+  --color-saathi-cat-motivation: var(--saathi-cat-motivation);
+  --color-saathi-cat-anger: var(--saathi-cat-anger);
+  --color-saathi-cat-focus: var(--saathi-cat-focus);
   --font-sans: var(--font-geist-sans);
 }
 
@@ -40,4 +64,27 @@ body {
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
