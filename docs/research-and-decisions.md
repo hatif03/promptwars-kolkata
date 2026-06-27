@@ -225,7 +225,62 @@ Each decision record follows: **Problem → Research evidence → Design decisio
 **Implementation:**
 - Chat: `llama-3.3-70b-versatile` via `@ai-sdk/groq`
 - Journal + insights: `llama-3.1-8b-instant` via `groq-sdk`
-- Key pool: `src/lib/groq/pool.ts` — round-robin, 429 cooldown, 6 retry attempts
+- Key pool: `src/lib/groq/pool.ts`, `src/lib/groq/stream-pool.ts` — round-robin, 429 cooldown, 6 retry attempts
+
+---
+
+### DR-14: Voice input and read-aloud (browser-first)
+
+**Problem:** Students under exam stress may be too tired to type, have literacy barriers, or prefer speaking in Hinglish. Typing-only interfaces exclude many users.
+
+**Research:** AETHER Phase 2 planned voice journaling. Inclusive design principles require multimodal input beyond keyboard.
+
+**Decision:** Add browser Web Speech API for dictation (STT) and `speechSynthesis` for read-aloud (TTS) on chat and journal. Store voice preferences in localStorage (zero schema migration). Groq Whisper deferred for better Hinglish accuracy.
+
+**Implementation:**
+- `src/hooks/useSpeechInput.ts`, `src/hooks/useSpeechOutput.ts`
+- Mic + speaker buttons in `CompanionChat.tsx`, `JournalEditor.tsx`
+- `src/components/a11y/VoiceSettings.tsx` on profile
+- Locale mapping: `language_pref` → `en-IN` / `hi-IN`
+
+---
+
+### DR-15: Accessibility as a first-class requirement
+
+**Problem:** Mental health apps must work for users with visual, motor, and cognitive disabilities — not only mouse-and-keyboard users.
+
+**Decision:** Harden ARIA semantics, keyboard navigation, screen reader announcements, and automated a11y testing before adding voice controls.
+
+**Implementation:**
+- `SkipToMain`, `LiveRegion`, labeled chat input, collapsible `aria-expanded`
+- Crisis sheet focus trap (`useFocusTrap.ts`) with tests
+- jest-axe on `CompanionChat`, `JournalEditor`, `CrisisSheet`
+- `useReducedMotion.ts` for motion preferences
+
+---
+
+### DR-16: AI reliability — key pool, health checks, deduplicated insights
+
+**Problem:** Demo and production traffic can hit Groq rate limits. Chat originally used only the first API key. Insights logic was duplicated across SSR page and API route.
+
+**Decision:** Extend key rotation to chat streaming; add health-check endpoint and CLI verifier; extract shared `generateWeeklyInsight()`.
+
+**Implementation:**
+- `src/lib/groq/stream-pool.ts` — `streamTextWithFallback` for chat
+- `GET /api/health/ai`, `npm run verify:ai` → `scripts/verify-groq.ts`
+- `src/lib/ai/generate-weekly-insight.ts` — shared by insights page and API
+
+---
+
+### DR-17: Real-time crisis pre-check
+
+**Problem:** Crisis detection only at submit time may be too late; students need immediate access to resources while expressing distress.
+
+**Decision:** Debounced client-side pre-check via `/api/crisis/check` while typing in chat/journal; opens crisis sheet proactively. Server-side keyword check on submit remains authoritative; LLM still bypassed on crisis.
+
+**Implementation:**
+- `src/hooks/useCrisisPrecheck.ts`
+- `AppShell.tsx` listens for `saathi:crisis-detected` custom event
 
 ---
 
@@ -244,6 +299,12 @@ Each decision record follows: **Problem → Research evidence → Design decisio
 | Trust level | R4, R8 | `companion.ts`, `profiles.trust_level` |
 | Crisis safety | R3, AETHER | `crisis.ts`, journal + chat routes |
 | Warm onboarding | R4, R8 | `OnboardingFlow.tsx`, middleware |
+| Voice input + read-aloud | AETHER Phase 2 | `useSpeechInput.ts`, `useSpeechOutput.ts`, `VoiceSettings.tsx` |
+| Accessibility hardening | WCAG / inclusive design | `SkipToMain`, `LiveRegion`, jest-axe tests |
+| AI health verification | Groq reliability | `/api/health/ai`, `scripts/verify-groq.ts` |
+| Chat key pool | Groq rate limits | `stream-pool.ts` |
+| Crisis pre-check | AETHER safety | `useCrisisPrecheck.ts`, `/api/crisis/check` |
+| Testing / CI | Production quality | Vitest, Playwright, `.github/workflows/ci.yml` |
 | Privacy approach | R6 | Supabase RLS, profile export |
 
 ---
@@ -252,9 +313,11 @@ Each decision record follows: **Problem → Research evidence → Design decisio
 
 | Planned feature | Research basis | Status |
 |-----------------|----------------|--------|
-| Push notification nudges | R8 (Headspace retention) | Toggle only; no push logic |
+| Push notification nudges | R8 (Headspace retention) | Rule-based home CTA only; no push delivery |
 | Anonymous community | R4 (isolation pain point) | Not in MVP |
-| Voice journaling | AETHER Phase 2 | Not in MVP |
+| Groq Whisper STT | AETHER Phase 2 | Browser STT implemented; Whisper planned |
+| RAG / full journal memory in chat | R3, R6 | Partial context only (3 journals + reflection) |
+| LLM crisis classifier | AETHER safety | Keyword detection only |
 | Local-first / offline storage | R6 (JournAI privacy) | Cloud Supabase instead |
 | Multilingual UI | R5 (Hinglish) | AI language only; UI mostly English |
 | Institutional partnerships | AETHER Phase 3 | Not in MVP |

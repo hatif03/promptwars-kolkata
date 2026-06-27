@@ -30,7 +30,7 @@ export function HomeCards({ recentThemes = [], daysToExam }: HomeCardsProps) {
           </CardContent>
         </Card>
       )}
-      <Link href="/companion">
+      <Link href="/companion" className="block">
         <Card className="overflow-hidden border-saathi-sage/40 bg-gradient-to-br from-saathi-sage-light via-saathi-mint/40 to-saathi-lavender/50 transition-transform hover:scale-[1.01]">
           <CardContent className="flex items-center justify-between p-5">
             <div>
@@ -38,11 +38,11 @@ export function HomeCards({ recentThemes = [], daysToExam }: HomeCardsProps) {
               <p className="mt-1 text-sm text-saathi-muted">
                 Open up about what matters most — I&apos;m listening.
               </p>
-              <Button size="sm" className="mt-3">
+              <span className="mt-3 inline-flex h-8 items-center rounded-full bg-saathi-sage px-3 text-xs font-medium text-white">
                 Start chat
-              </Button>
+              </span>
             </div>
-            <MessageCircle className="h-12 w-12 text-saathi-sage" />
+            <MessageCircle className="h-12 w-12 text-saathi-sage" aria-hidden="true" />
           </CardContent>
         </Card>
       </Link>

@@ -40,6 +40,7 @@ function excerpt(text: string, max = 120): string {
 function EntryCard({ entry, defaultOpen }: { entry: JournalEntryRow; defaultOpen?: boolean }) {
   const [open, setOpen] = useState(defaultOpen ?? false);
   const isToday = formatDate(entry.created_at).startsWith("Today");
+  const detailsId = `journal-entry-${entry.id}`;
 
   return (
     <Card className={isToday ? "border-saathi-sage/40 bg-saathi-sage/5" : ""}>
@@ -47,6 +48,8 @@ function EntryCard({ entry, defaultOpen }: { entry: JournalEntryRow; defaultOpen
         <button
           type="button"
           onClick={() => setOpen(!open)}
+          aria-expanded={open}
+          aria-controls={detailsId}
           className="flex w-full items-start justify-between gap-2 text-left"
         >
           <div className="min-w-0 flex-1">
@@ -70,14 +73,14 @@ function EntryCard({ entry, defaultOpen }: { entry: JournalEntryRow; defaultOpen
             )}
           </div>
           {open ? (
-            <ChevronUp className="h-4 w-4 shrink-0 text-saathi-muted" />
+            <ChevronUp className="h-4 w-4 shrink-0 text-saathi-muted" aria-hidden="true" />
           ) : (
-            <ChevronDown className="h-4 w-4 shrink-0 text-saathi-muted" />
+            <ChevronDown className="h-4 w-4 shrink-0 text-saathi-muted" aria-hidden="true" />
           )}
         </button>
 
         {open && (
-          <div className="mt-3 space-y-3 border-t border-saathi-sage/10 pt-3">
+          <div id={detailsId} className="mt-3 space-y-3 border-t border-saathi-sage/10 pt-3">
             {entry.themes && entry.themes.length > 0 && (
               <div className="flex flex-wrap gap-1">
                 {entry.themes.map((t) => (

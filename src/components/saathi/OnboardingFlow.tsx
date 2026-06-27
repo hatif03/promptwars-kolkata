@@ -12,6 +12,14 @@ import { AI_DISCLAIMER } from "@/lib/safety/crisis";
 
 type Step = "welcome" | "profile" | "journal" | "done";
 
+const STEP_ORDER: Step[] = ["welcome", "profile", "journal", "done"];
+const STEP_LABELS: Record<Step, string> = {
+  welcome: "Welcome",
+  profile: "Profile",
+  journal: "First journal",
+  done: "Complete",
+};
+
 export function OnboardingFlow() {
   const router = useRouter();
 
@@ -93,12 +101,32 @@ export function OnboardingFlow() {
     return (
       <Card>
         <CardContent className="space-y-4 pt-6">
+          <nav aria-label="Onboarding progress">
+            <ol className="mb-4 flex gap-2 text-xs">
+              {STEP_ORDER.map((s) => (
+                <li
+                  key={s}
+                  aria-current={step === s ? "step" : undefined}
+                  className={
+                    step === s
+                      ? "font-medium text-saathi-sage-dark"
+                      : "text-saathi-muted"
+                  }
+                >
+                  {STEP_LABELS[s]}
+                </li>
+              ))}
+            </ol>
+          </nav>
           <h2 className="text-lg font-semibold text-saathi-ink">Tell me about you</h2>
           <p className="text-sm text-saathi-muted">No long forms — just the basics.</p>
 
           <div>
-            <label className="mb-1 block text-sm text-saathi-ink">What should I call you?</label>
+            <label htmlFor="onboarding-name" className="mb-1 block text-sm text-saathi-ink">
+              What should I call you?
+            </label>
             <Input
+              id="onboarding-name"
               placeholder="Aanya"
               value={displayName}
               onChange={(e) => setDisplayName(e.target.value)}
@@ -150,10 +178,11 @@ export function OnboardingFlow() {
           </div>
 
           <div>
-            <label className="mb-1 block text-sm text-saathi-ink">
+            <label htmlFor="onboarding-days" className="mb-1 block text-sm text-saathi-ink">
               Days until exam (optional)
             </label>
             <Input
+              id="onboarding-days"
               type="number"
               placeholder="120"
               value={daysToExam}

@@ -67,6 +67,7 @@ function InsightContent({ insight, hero }: { insight: WeeklyInsight; hero?: bool
 function PastReportCard({ record }: { record: WeeklyInsightRecord }) {
   const [open, setOpen] = useState(false);
   const isWeek4 = record.weekStart === "2026-04-28";
+  const detailsId = `insight-${record.weekStart}`;
 
   return (
     <Card className={isWeek4 ? "border-saathi-sage/30" : ""}>
@@ -74,6 +75,8 @@ function PastReportCard({ record }: { record: WeeklyInsightRecord }) {
         <button
           type="button"
           onClick={() => setOpen(!open)}
+          aria-expanded={open}
+          aria-controls={detailsId}
           className="flex w-full items-center justify-between gap-2 text-left"
         >
           <div>
@@ -85,13 +88,13 @@ function PastReportCard({ record }: { record: WeeklyInsightRecord }) {
             )}
           </div>
           {open ? (
-            <ChevronUp className="h-4 w-4 shrink-0 text-saathi-muted" />
+            <ChevronUp className="h-4 w-4 shrink-0 text-saathi-muted" aria-hidden="true" />
           ) : (
-            <ChevronDown className="h-4 w-4 shrink-0 text-saathi-muted" />
+            <ChevronDown className="h-4 w-4 shrink-0 text-saathi-muted" aria-hidden="true" />
           )}
         </button>
         {open && (
-          <div className="mt-4 space-y-3">
+          <div id={detailsId} className="mt-4 space-y-3">
             <InsightContent insight={record} />
           </div>
         )}

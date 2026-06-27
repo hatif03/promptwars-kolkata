@@ -1,12 +1,10 @@
 "use client";
 
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import Link from "next/link";
 import { BottomNav } from "./BottomNav";
 import { QuickExit } from "./QuickExit";
-import { CrisisButton } from "./CrisisSheet";
-import { useState } from "react";
-import { CrisisSheet } from "./CrisisSheet";
+import { CrisisButton, CrisisSheet } from "./CrisisSheet";
 
 type AppShellProps = {
   children: ReactNode;
@@ -24,6 +22,14 @@ export function AppShell({
   headerRight,
 }: AppShellProps) {
   const [crisisOpen, setCrisisOpen] = useState(false);
+
+  useEffect(() => {
+    function onCrisisDetected() {
+      setCrisisOpen(true);
+    }
+    window.addEventListener("saathi:crisis-detected", onCrisisDetected);
+    return () => window.removeEventListener("saathi:crisis-detected", onCrisisDetected);
+  }, []);
 
   return (
     <div className="mx-auto min-h-screen max-w-md bg-saathi-bg pb-24">

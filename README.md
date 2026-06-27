@@ -41,12 +41,14 @@ The account includes **~3 months of journals, mood check-ins, weekly Pattern Rep
 ### What to explore
 
 1. **Login** at `/login` — onboarding is already complete; you land on `/home`
-2. **Home / Journal** — read Aanya's recent entries; note Hinglish content and empathetic AI reflections
+2. **Home / Journal** — read Aanya's recent entries; note Hinglish content and empathetic AI reflections; try the **mic button** to dictate
 3. **Insights** (`/insights`) — open the Week 4 Pattern Report; see physics + Sunday call patterns with evidence quotes
-4. **Saathi Chat** (`/companion`) — continue a conversation; AI knows her exam, trust level (4), and recent themes
+4. **Saathi Chat** (`/companion`) — continue a conversation; AI knows her exam, trust level (4), and recent themes; use **speaker icon** for read-aloud
 5. **Calm Kit** (`/calm-kit`) — browse 2–7 min micro-interventions; try "Pre-Mock Calm" or "Box Breathing"
 6. **Crisis safety** — note the Quick Exit button (top-right) and Tele-MANAS 14416 in the crisis sheet
-7. **Profile** (`/profile`) — view stats and export journal data
+7. **Profile** (`/profile`) — voice assistance settings, stats, and journal export
+
+**Judges:** follow the step-by-step live demo script in [docs/judge-demo-script.md](docs/judge-demo-script.md) (~12 min, AI-focused).
 
 Full narrative source: [`supabase/seed/aanya-narrative.json`](supabase/seed/aanya-narrative.json)
 
@@ -68,12 +70,15 @@ Design decisions are grounded in research — see [docs/research-and-decisions.m
 
 | Feature | Description |
 |---------|-------------|
-| **Journal + AI reflection** | Open-ended journaling with empathetic Groq-powered insights, themes, and micro-steps |
+| **Journal + AI reflection** | Open-ended journaling with empathetic Groq-powered insights, themes, micro-steps, and Calm Kit recommendations |
 | **Mood check-ins** | Quick emoji mood strip with contextual tags (Mock test, Physics, Family, etc.) |
-| **Saathi Chat** | 24/7 streaming companion in English, Hindi, or Hinglish |
+| **Saathi Chat** | 24/7 streaming companion in English, Hindi, or Hinglish — context from profile, moods, and journals |
 | **Pattern Reports** | Weekly AI synthesis of emotional patterns with evidence from the student's own words |
 | **Calm Kit** | 10 micro-interventions (2–7 min), adaptively recommended from journal themes |
-| **Crisis safety** | Rule-based crisis detection, Tele-MANAS 14416, Quick Exit, trauma-informed UX |
+| **Crisis safety** | Rule-based crisis detection (EN + Hindi), real-time pre-check, Tele-MANAS 14416, Quick Exit |
+| **Voice assistance** | Browser speech-to-text (dictate journals/chat) and text-to-speech read-aloud |
+| **Accessibility** | Skip links, ARIA labels, screen reader live regions, keyboard-friendly UI |
+| **Gentle nudges** | Rule-based home check-ins when journaling gaps or low mood trends are detected |
 
 ---
 
@@ -83,7 +88,9 @@ Design decisions are grounded in research — see [docs/research-and-decisions.m
 |-------|------------|
 | Frontend | Next.js 16 (App Router), React 19, Tailwind CSS v4 |
 | Backend / Auth | Supabase (PostgreSQL, RLS, SSR cookie sessions) |
-| AI | Groq — `llama-3.3-70b-versatile` (chat), `llama-3.1-8b-instant` (journal + insights) |
+| AI | Groq — `llama-3.3-70b-versatile` (chat), `llama-3.1-8b-instant` (journal + insights); multi-key rotation |
+| Voice | Browser Web Speech API (STT + TTS) |
+| Testing | Vitest, jest-axe, Playwright, GitHub Actions CI |
 | Deploy | Vercel |
 | Validation | Zod |
 
@@ -138,17 +145,36 @@ src/app/
   insights/       — weekly Pattern Reports
   profile/        — stats, export, settings
   api/            — Groq-powered API routes
-src/components/saathi/  — app UI (AppShell, JournalEditor, CrisisSheet, etc.)
+src/components/
+  saathi/         — app UI (AppShell, JournalEditor, CompanionChat, etc.)
+  a11y/           — SkipToMain, LiveRegion, VoiceSettings
+src/hooks/        — useSpeechInput, useSpeechOutput, useCrisisPrecheck, useFocusTrap
 src/lib/
   ai/prompts/     — companion, journal, insights system prompts
+  ai/             — generate-weekly-insight, parse-journal-analysis
   safety/         — crisis keyword detection + resources
-  groq/           — API key pool with rate-limit rotation
-  data/           — Calm Kit exercises
+  groq/           — key pool, stream-pool (chat rotation)
+  speech/         — voice preferences, speech locale helpers
 supabase/
   migrations/     — database schema + RLS
   seed/           — Aanya demo narrative + seed script
 docs/             — architecture, research, FAQ
 ```
+
+---
+
+## Testing
+
+```bash
+npm test              # Unit & component tests (Vitest)
+npm run test:coverage # With coverage thresholds
+npm run typecheck     # TypeScript check
+npm run lint          # ESLint
+npm run verify:ai     # Groq AI health check (uses .env.local keys)
+npm run test:e2e      # Playwright smoke tests
+```
+
+CI runs lint, typecheck, and tests on every push. Optional `ai-smoke` job verifies Groq when `GROQ_API_KEY_1` is set as a GitHub secret.
 
 ---
 
@@ -160,6 +186,7 @@ docs/             — architecture, research, FAQ
 | [docs/architecture.md](docs/architecture.md) | System architecture, data model, API pipelines |
 | [docs/research-and-decisions.md](docs/research-and-decisions.md) | Research citations mapped to feature decisions |
 | [docs/faq.md](docs/faq.md) | Complete Q&A |
+| [docs/judge-demo-script.md](docs/judge-demo-script.md) | **Live demo script for judges (AI-focused)** |
 | [DeepSeek-AETHER AI Companion.md](DeepSeek-AETHER%20AI%20Companion.md) | Original product vision and research |
 
 ---

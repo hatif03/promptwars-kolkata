@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createGroq } from "@ai-sdk/groq";
-import { streamText } from "ai";
 import { createClient } from "@/lib/supabase/server";
 import { buildCompanionPrompt, COMPANION_MODEL } from "@/lib/ai/prompts/companion";
 import { checkCrisisContent, CRISIS_RESPONSE_TEMPLATE } from "@/lib/safety/crisis";
 import { loadApiKeys } from "@/lib/groq/keys";
+import { streamTextWithFallback } from "@/lib/groq/stream-pool";
 
 export async function POST(request: NextRequest) {
   try {
@@ -53,7 +52,7 @@ export async function POST(request: NextRequest) {
 
     const { data: recentJournals } = await supabase
       .from("journal_entries")
-      .select("themes, content")
+      .select("themes, content, ai_reflection")
       .eq("user_id", user.id)
       .order("created_at", { ascending: false })
       .limit(3);
@@ -71,15 +70,13 @@ export async function POST(request: NextRequest) {
       recentMoods: recentMoods?.map((m) => m.mood) ?? [],
       recentThemes,
       recentJournalSnippet: recentJournals?.[0]?.content,
+      recentReflection: recentJournals?.[0]?.ai_reflection ?? undefined,
     });
 
     const keys = loadApiKeys();
-    const apiKey = keys[0];
-    if (!apiKey) {
+    if (keys.length === 0) {
       return NextResponse.json({ error: "Groq API key not configured" }, { status: 503 });
     }
-
-    const groq = createGroq({ apiKey });
 
     if (lastUserMessage?.content && checkCrisisContent(lastUserMessage.content).isCrisis) {
       let activeSessionId = sessionId;
@@ -104,8 +101,8 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    const result = streamText({
-      model: groq(COMPANION_MODEL),
+    const result = await streamTextWithFallback({
+      modelId: COMPANION_MODEL,
       system: systemPrompt,
       messages,
       temperature: 0.7,

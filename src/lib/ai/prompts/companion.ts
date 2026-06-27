@@ -9,6 +9,7 @@ export type CompanionContext = {
   recentMoods?: string[];
   recentThemes?: string[];
   recentJournalSnippet?: string;
+  recentReflection?: string;
 };
 
 export function buildCompanionPrompt(ctx: CompanionContext): string {
@@ -29,6 +30,7 @@ Student context:
 - Recent moods: ${ctx.recentMoods?.join(", ") || "none logged"}
 - Recent journal themes: ${ctx.recentThemes?.join(", ") || "none"}
 ${ctx.recentJournalSnippet ? `- Recent journal excerpt: "${ctx.recentJournalSnippet.slice(0, 200)}..."` : ""}
+${ctx.recentReflection ? `- Latest Saathi reflection for them: "${ctx.recentReflection.slice(0, 200)}..."` : ""}
 
 Persona rules (WTMF + AETHER):
 1. LISTEN FIRST — don't rush to fix

@@ -9,6 +9,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import type { Profile } from "@/lib/types";
 import { AI_DISCLAIMER } from "@/lib/safety/crisis";
 import { LogOut, Download } from "lucide-react";
+import { VoiceSettings } from "@/components/a11y/VoiceSettings";
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -137,12 +138,25 @@ export default function ProfilePage() {
                 <p className="text-sm font-medium text-saathi-ink">Gentle nudges</p>
                 <p className="text-xs text-saathi-muted">Warm check-ins, max 1–2/day</p>
               </div>
-              <Button variant="secondary" size="sm" onClick={toggleNudges}>
+              <button
+                type="button"
+                role="switch"
+                aria-checked={profile?.nudge_enabled ?? false}
+                aria-label="Gentle nudges"
+                onClick={toggleNudges}
+                className={`rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
+                  profile?.nudge_enabled
+                    ? "bg-saathi-sage text-white"
+                    : "bg-saathi-cream text-saathi-ink"
+                }`}
+              >
                 {profile?.nudge_enabled ? "On" : "Off"}
-              </Button>
+              </button>
             </div>
           </CardContent>
         </Card>
+
+        <VoiceSettings languagePref={profile?.language_pref ?? "hinglish"} />
 
         <Button variant="outline" className="w-full" onClick={exportJournal}>
           <Download className="h-4 w-4" />

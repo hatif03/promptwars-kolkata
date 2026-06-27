@@ -56,12 +56,18 @@ export function ExercisePlayer({ exercise }: ExercisePlayerProps) {
       <Card>
         <CardContent className="space-y-4 pt-6 text-center">
           <h2 className="text-lg font-semibold">Did this help?</h2>
-          <div className="flex justify-center gap-2">
+          <div
+            role="group"
+            aria-label="Rate how helpful this exercise was, from 1 to 5"
+            className="flex justify-center gap-2"
+          >
             {[1, 2, 3, 4, 5].map((n) => (
               <button
                 key={n}
                 type="button"
                 onClick={() => setRating(n)}
+                aria-label={`Rate ${n} of 5`}
+                aria-pressed={rating === n}
                 className={`h-10 w-10 rounded-full text-sm font-medium ${
                   rating === n
                     ? "bg-saathi-sage text-white"

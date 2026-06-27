@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { AI_DISCLAIMER } from "@/lib/safety/crisis";
 import { DEMO_ACCOUNT } from "@/lib/demo-account";
+import { SkipToMain } from "@/components/a11y/SkipToMain";
 
 type AuthMode = "login" | "signup";
 
@@ -98,6 +99,7 @@ export default function LoginPage() {
 
   return (
     <div className="mx-auto flex min-h-screen max-w-md flex-col justify-center px-5 py-12">
+      <SkipToMain />
       <div className="mb-8 text-center">
         <p className="text-sm font-medium uppercase tracking-widest text-saathi-sage">
           Saathi
@@ -144,11 +146,17 @@ export default function LoginPage() {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card id="main-content" tabIndex={-1}>
         <CardContent className="space-y-4 pt-6">
-          <div className="flex rounded-2xl bg-saathi-cream/60 p-1">
+          <div
+            role="tablist"
+            aria-label="Authentication mode"
+            className="flex rounded-2xl bg-saathi-cream/60 p-1"
+          >
             <button
               type="button"
+              role="tab"
+              aria-selected={mode === "login"}
               onClick={() => {
                 setMode("login");
                 setError(null);
@@ -164,8 +172,9 @@ export default function LoginPage() {
             </button>
             <button
               type="button"
+              role="tab"
+              aria-selected={mode === "signup"}
               onClick={() => {
-                setMode("signup");
                 setError(null);
                 setMessage(null);
               }}
@@ -212,11 +221,19 @@ export default function LoginPage() {
             </div>
 
             {error && (
-              <p className="rounded-2xl border border-saathi-destructive/20 bg-saathi-destructive/5 p-3 text-sm text-saathi-destructive">{error}</p>
+              <p
+                role="alert"
+                className="rounded-2xl border border-saathi-destructive/20 bg-saathi-destructive/5 p-3 text-sm text-saathi-destructive"
+              >
+                {error}
+              </p>
             )}
 
             {message && (
-              <p className="rounded-2xl bg-saathi-sage/10 p-3 text-sm text-saathi-ink">
+              <p
+                role="status"
+                className="rounded-2xl bg-saathi-sage/10 p-3 text-sm text-saathi-ink"
+              >
                 {message}
               </p>
             )}

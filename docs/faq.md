@@ -56,13 +56,17 @@ Full narrative: [`supabase/seed/aanya-narrative.json`](../supabase/seed/aanya-na
 
 ### What should judges try first?
 
-1. Login at `/login` with demo credentials
-2. Read journals on `/home` — note Hinglish content and AI reflections
+See the full **[Judge Demo Script](judge-demo-script.md)** (~12 min, AI-focused). Quick path:
+
+1. Login at `/login` with demo credentials (or **Explore as Aanya Sharma**)
+2. Read journals on `/home` — note Hinglish content and AI reflections; try **mic dictation**
 3. Open Pattern Report at `/insights` — Week 4 shows physics + Sunday patterns
-4. Chat at `/companion` — AI knows her exam, trust level, and themes
+4. Chat at `/companion` — AI knows her exam, trust level, and themes; try **speaker read-aloud**
 5. Try Calm Kit at `/calm-kit` — "Box Breathing" or "Pre-Mock Calm"
-6. Check crisis safety — Quick Exit button, Tele-MANAS 14416
-7. View stats and export at `/profile`
+6. Check crisis safety — Quick Exit button, real-time pre-check, Tele-MANAS 14416
+7. View voice settings, stats, and export at `/profile`
+
+**Pre-flight:** `npm run verify:ai` confirms all three Groq AI surfaces are working.
 
 ### How do I seed demo data locally?
 
@@ -94,7 +98,7 @@ One report per calendar week, cached in the database. Generated on first visit t
 
 ### How does Saathi Chat remember context?
 
-Each chat session loads your profile (name, exam, language, trust level, days to exam), your last 7 mood check-ins, and themes/snippets from your last 3 journal entries. This context is injected into the system prompt. Messages within a session are persisted to the database.
+Each chat session loads your profile (name, exam, language, trust level, days to exam), your last 7 mood check-ins, themes and snippets from your last 3 journal entries, and your latest AI reflection. This context is injected into the system prompt. Messages within a session are persisted to the database. Chat uses **`llama-3.3-70b-versatile`** with key rotation via `stream-pool.ts`.
 
 ### What is Calm Kit?
 
@@ -125,6 +129,25 @@ Demo user Aanya has trust level 4.
 
 A quick emoji mood strip on the home screen. Select your mood (happy, calm, anxious, angry, sad, tired, overwhelmed) and optional tags like "Mock test", "Physics", "Family". Saved alongside journal entries for pattern analysis.
 
+### Can I use voice instead of typing?
+
+Yes. Saathi supports **browser-based voice input** on the chat and journal screens (mic button). Tap to dictate in English, Hindi, or Hinglish — works best in Chrome or Edge. You can also **listen to AI responses** via speaker buttons or enable read-aloud in Profile → Voice assistance.
+
+Voice uses the Web Speech API (no extra Groq cost). Groq Whisper for improved Hinglish accuracy is planned.
+
+### What accessibility features exist?
+
+- Skip-to-main links on login and app shell
+- Screen reader labels on chat input, messages, and dynamic AI content
+- ARIA on collapsible journal/insight cards, mood toggles, and crisis modal
+- Focus trap in crisis sheet; keyboard navigation throughout
+- Voice dictation and text-to-speech for users who struggle to type or read
+- Tested with jest-axe on core components
+
+### What are gentle nudges?
+
+When enabled in Profile, Saathi shows a **rule-based** home card if you haven't journaled in 3+ days or have had several low/anxious moods recently. It suggests journaling, chat, or Calm Kit — no LLM-generated push spam (push notifications not yet implemented).
+
 ### Can I export my journal data?
 
 Yes. Go to `/profile` and use the export feature to download your journal entries as JSON.
@@ -135,7 +158,7 @@ Yes. Go to `/profile` and use the export feature to download your journal entrie
 
 ### What happens if I write about self-harm or suicide?
 
-Saathi runs rule-based keyword detection (English and Hindi) **before** sending content to the AI. If crisis keywords are matched:
+Saathi runs rule-based keyword detection (English and Hindi) **before** sending content to the AI. While typing, a **debounced pre-check** also calls `/api/crisis/check` and can open the crisis sheet early. If crisis keywords are matched on submit:
 
 1. The LLM is bypassed entirely
 2. You receive a fixed empathetic response with helpline numbers
@@ -195,7 +218,15 @@ The AETHER plan advocated local-first storage (inspired by JournAI). For the MVP
 
 ### How does API key rotation work?
 
-Multiple Groq keys (`GROQ_API_KEY_1`, `_2`, etc.) are loaded into a round-robin pool. On 429 rate limits, the failing key enters a 60-second cooldown and the next key is tried with exponential backoff. Up to 6 attempts before failure.
+Multiple Groq keys (`GROQ_API_KEY_1`, `_2`, etc.) are loaded into round-robin pools. Journal and insights use `pool.ts`; chat streaming uses `stream-pool.ts`. On 429 rate limits, the failing key enters a 60-second cooldown and the next key is tried with exponential backoff. Up to 6 attempts before failure.
+
+### How do I verify Groq AI is working?
+
+```bash
+npm run verify:ai
+```
+
+This runs `scripts/verify-groq.ts`, which pings all three AI surfaces (chat, journal, insights). In development you can also call `GET /api/health/ai`. Set `AI_HEALTH_CHECK_ENABLED=true` to enable the endpoint in production. GitHub Actions can run an optional `ai-smoke` job when `GROQ_API_KEY_1` is configured as a secret.
 
 ### What environment variables are required?
 
@@ -220,6 +251,19 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000).
+
+### How do I run tests?
+
+```bash
+npm test              # Unit & component tests
+npm run test:coverage # With coverage thresholds
+npm run typecheck     # TypeScript
+npm run lint          # ESLint
+npm run verify:ai     # Groq AI health check
+npm run test:e2e      # Playwright smoke tests
+```
+
+CI (`.github/workflows/ci.yml`) runs lint, typecheck, and tests on every push.
 
 ### How do I deploy to Vercel?
 
@@ -286,13 +330,17 @@ From the AETHER plan:
 
 | Feature | Status |
 |---------|--------|
-| Push notification nudges | Toggle exists; no push logic |
+| Push notification nudges | Toggle + rule-based home CTA; no push delivery |
 | Anonymous community spaces | Not in MVP |
-| Voice journaling | Planned Phase 2 |
+| Groq Whisper STT | Planned; browser Web Speech API used now |
+| RAG / long-term journal memory in chat | Planned |
+| LLM-based crisis classifier | Planned; keyword detection used now |
 | Local-first / offline storage | Planned; cloud Supabase used now |
 | Full multilingual UI | AI language only; UI mostly English |
 | Institutional mental health partnerships | Planned Phase 3 |
 | Multilingual support (Tamil, Telugu, etc.) | Planned Phase 3 |
+
+**Recently implemented:** voice input + read-aloud, accessibility hardening, AI health verification, chat key pool rotation, crisis pre-check, shared insights generation, Vitest/Playwright/CI.
 
 See [architecture.md](architecture.md) for the full implemented vs planned table.
 
@@ -315,6 +363,7 @@ Open an issue in the repository or contact the team directly.
 ### Where can I learn more?
 
 - [Root README](../README.md) — setup and demo
+- [Judge Demo Script](judge-demo-script.md) — live AI demo for judges
 - [Architecture](architecture.md) — technical details
 - [Research & Decisions](research-and-decisions.md) — why each feature exists
 - [AETHER plan](../DeepSeek-AETHER%20AI%20Companion.md) — original product vision

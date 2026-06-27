@@ -1,20 +1,11 @@
 import { AppShell } from "@/components/saathi/AppShell";
 import { InsightsView } from "@/components/saathi/InsightsView";
 import { createClient } from "@/lib/supabase/server";
-import { callGroqWithFallback } from "@/lib/groq/pool";
-import { buildInsightsPrompt, INSIGHTS_MODEL } from "@/lib/ai/prompts/insights";
+import { generateWeeklyInsight, getWeekStart } from "@/lib/ai/generate-weekly-insight";
 import type { WeeklyInsight, WeeklyInsightRecord } from "@/lib/types";
 import { hasGroqKeys } from "@/lib/groq/keys";
 
 export const dynamic = "force-dynamic";
-
-function getWeekStart(date = new Date()): string {
-  const d = new Date(date);
-  const day = d.getDay();
-  const diff = d.getDate() - day + (day === 0 ? -6 : 1);
-  d.setDate(diff);
-  return d.toISOString().split("T")[0];
-}
 
 const WEEK_LABELS: Record<string, string> = {
   "2026-04-07": "Week 2 — Early patterns",
@@ -107,32 +98,7 @@ async function loadInsights(userId: string) {
 
   const language = profile?.language_pref ?? "hinglish";
 
-  const { result } = await callGroqWithFallback(async (client) => {
-    return client.chat.completions.create({
-      model: INSIGHTS_MODEL,
-      messages: [
-        { role: "system", content: buildInsightsPrompt(language) },
-        { role: "user", content: JSON.stringify({ journals, moods }, null, 2) },
-      ],
-      temperature: 0.3,
-      max_tokens: 900,
-      response_format: { type: "json_object" },
-    });
-  });
-
-  const raw = result.choices[0]?.message?.content ?? "{}";
-  let parsed: WeeklyInsight;
-
-  try {
-    parsed = JSON.parse(raw) as WeeklyInsight;
-  } catch {
-    parsed = {
-      summary: "You've been showing up for yourself this week. That takes courage.",
-      patterns: [],
-      invitationQuestion: "Does anything feel familiar here?",
-      focusForWeek: "Try one small break without guilt.",
-    };
-  }
+  const parsed = await generateWeeklyInsight(journals ?? [], moods ?? [], language);
 
   await supabase.from("weekly_insights").upsert(
     {
