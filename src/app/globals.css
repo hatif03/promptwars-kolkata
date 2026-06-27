@@ -1,26 +1,43 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f7f5f2;
+  --foreground: #2d3436;
+  --saathi-bg: #f7f5f2;
+  --saathi-cream: #f0ebe3;
+  --saathi-lavender: #d4c5e8;
+  --saathi-sage: #7ba098;
+  --saathi-sage-dark: #5f857c;
+  --saathi-ink: #2d3436;
+  --saathi-muted: #6b7280;
+  --saathi-crisis: #b45309;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-saathi-bg: var(--saathi-bg);
+  --color-saathi-cream: var(--saathi-cream);
+  --color-saathi-lavender: var(--saathi-lavender);
+  --color-saathi-sage: var(--saathi-sage);
+  --color-saathi-sage-dark: var(--saathi-sage-dark);
+  --color-saathi-ink: var(--saathi-ink);
+  --color-saathi-muted: var(--saathi-muted);
+  --color-saathi-crisis: var(--saathi-crisis);
   --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--saathi-bg);
+  color: var(--saathi-ink);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

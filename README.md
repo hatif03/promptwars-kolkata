@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Saathi — Empathetic AI Companion for Student Mental Well-Being
 
-## Getting Started
+Exam prep ka saathi for NEET, JEE, CUET, CAT, GATE, and UPSC aspirants.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **Journal + AI reflection** — open-ended journaling with empathetic Groq-powered insights
+- **Saathi Chat** — 24/7 bilingual companion (EN / Hindi / Hinglish)
+- **Pattern Reports** — weekly AI synthesis of emotional patterns
+- **Calm Kit** — 10 micro-interventions (2–7 min), adaptively recommended
+- **Crisis safety** — Tele-MANAS 14416, Quick Exit, trauma-informed UX
+
+## Stack
+
+- Next.js 16 · Vercel · Supabase · Groq (multi-key rotation) · Tailwind CSS
+
+## Setup
+
+1. **Clone and install**
+   ```bash
+   npm install
+   cp .env.example .env.local
+   ```
+
+2. **Supabase**
+   - Create a project at [supabase.com](https://supabase.com)
+   - Run migration: `supabase/migrations/001_initial_schema.sql` in SQL Editor
+   - **Authentication → Providers → Email** — enable Email provider
+   - For instant signup (no confirmation email): disable **Confirm email** under Email settings
+   - **Authentication → URL Configuration** — Site URL: `http://localhost:3000`
+
+3. **Groq**
+   - Get API keys from [console.groq.com](https://console.groq.com)
+   - Add `GROQ_API_KEY_1`, `GROQ_API_KEY_2`, etc. to `.env.local`
+
+4. **Run**
+   ```bash
+   npm run dev
+   ```
+
+5. **Deploy to Vercel**
+   - Connect repo, add env vars from `.env.example`
+   - Set `NEXT_PUBLIC_APP_URL` to your production URL
+   - Add production callback URL in Supabase auth settings
+
+## Demo persona: Aanya Sharma
+
+NEET 2026 aspirant from Kota — use onboarding flow and sample journal entries for demos.
+
+Optional demo seed (after creating a user): run `supabase/seed/demo_aanya.sql` with the user's UUID.
+
+## Project structure
+
+```
+src/app/home          — journal-first home
+src/app/companion     — Saathi chat
+src/app/calm-kit      — micro-interventions
+src/app/insights      — weekly pattern reports
+src/app/api/*         — Groq-powered API routes
+supabase/migrations   — database schema + RLS
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Ethics
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Saathi is an AI companion, **not** a therapist. Crisis resources are always available within 2 taps.
