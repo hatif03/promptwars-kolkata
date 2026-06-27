@@ -7,6 +7,7 @@ import {
   languageToSpeechLocale,
   type SpeechInputStatus,
 } from "@/lib/speech/speech-input";
+import { useSpeechInputSupported } from "@/hooks/useBrowserMedia";
 
 type SpeechRecognitionEventLike = {
   results: SpeechRecognitionResultList;
@@ -47,9 +48,8 @@ export function useSpeechInput({
   onTranscript,
   onError,
 }: UseSpeechInputOptions) {
-  const [status, setStatus] = useState<SpeechInputStatus>(
-    isSpeechInputSupported() ? "idle" : "unsupported"
-  );
+  const isSupported = useSpeechInputSupported();
+  const [status, setStatus] = useState<SpeechInputStatus>("idle");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const recognitionRef = useRef<SpeechRecognitionInstance | null>(null);
   const onTranscriptRef = useRef(onTranscript);
@@ -148,7 +148,7 @@ export function useSpeechInput({
   return {
     status,
     isListening: status === "listening",
-    isSupported: isSpeechInputSupported(),
+    isSupported,
     errorMessage,
     startListening,
     stopListening,

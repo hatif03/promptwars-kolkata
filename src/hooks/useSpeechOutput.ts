@@ -4,10 +4,16 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type { LanguagePref } from "@/lib/types";
 import { languageToSpeechLocale } from "@/lib/speech/speech-input";
 import { getVoicePreferences, type VoicePreferences } from "@/lib/speech/voice-preferences";
+import { useSpeechOutputSupported } from "@/hooks/useBrowserMedia";
 
 export function isSpeechOutputSupported(): boolean {
   return typeof window !== "undefined" && "speechSynthesis" in window;
 }
+
+const DEFAULT_VOICE_PREFERENCES: VoicePreferences = {
+  ttsEnabled: true,
+  autoRead: false,
+};
 
 export type UseSpeechOutputOptions = {
   languagePref?: LanguagePref;
@@ -15,10 +21,13 @@ export type UseSpeechOutputOptions = {
 
 export function useSpeechOutput({ languagePref = "en" }: UseSpeechOutputOptions = {}) {
   const [speaking, setSpeaking] = useState(false);
-  const [preferences, setPreferences] = useState<VoicePreferences>(() =>
-    typeof window !== "undefined" ? getVoicePreferences() : { ttsEnabled: true, autoRead: false }
-  );
+  const [preferences, setPreferences] = useState<VoicePreferences>(DEFAULT_VOICE_PREFERENCES);
+  const isSupported = useSpeechOutputSupported();
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
+
+  useEffect(() => {
+    setPreferences(getVoicePreferences());
+  }, []);
 
   const stopSpeaking = useCallback(() => {
     if (typeof window !== "undefined" && window.speechSynthesis) {
@@ -68,7 +77,7 @@ export function useSpeechOutput({ languagePref = "en" }: UseSpeechOutputOptions 
     speak,
     stopSpeaking,
     speaking,
-    isSupported: isSpeechOutputSupported(),
+    isSupported,
     preferences,
     updatePreferences,
   };
